@@ -10,6 +10,8 @@ dependencies = [
     "flask-jwt-extended==4.6.0",
     "flask-sqlalchemy==3.1.1",
     "flask-swagger-ui==4.11.1",
+    "pytest>=9.0.2",
     "python-dotenv==1.0.0",
     "pyyaml==6.0.1",
+    "requests>=2.32.5",
 ]
