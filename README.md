@@ -1,138 +1,70 @@
-# Evently API
+### course topic: from API to a production ready cloud service.
 
-A Flask-based REST API for managing events and RSVPs with different access levels. This API is designed to teach web security best practices through incremental improvements.
+repository: [GitHub](https://github.com/nesmomik/Events-API)
 
-## Features
+more documentation of the Events-API at the upstream repository:  [GitHub](https://github.com/Masterschool-SWE/Events-API)
 
-- **Public Events**: Anyone can RSVP without authentication
-- **Protected Events**: Requires user authentication to RSVP
-- **Admin Events**: Requires admin role to RSVP
+## course topic: from API to a production ready cloud service.
 
-## Tech Stack
+repository: [GitHub](https://github.com/nesmomik/Events-API)
 
-- Flask 3.0.0
-- Flask-SQLAlchemy (SQLite database)
-- Flask-CORS
-- Flask-JWT-Extended (JWT authentication)
+### part 1: discover the API / preparation
+Overview:
+- the [OpenAPI Specification](https://learn.openapis.org/), is a specification for a machine-readable interface definition language for describing, producing, consuming and visualizing web services
+- in the project a `openapi.yaml` file is provided to document the API
+- this allows to use [SwaggerUI](https://swagger.io/tools/swagger-ui/) to explore the API functionality and also to try it out
 
-## Setup
+Completed Tasks:
+- forked the upstream repo
+- set up the environment with `uv`
+- run and explore the repo
 
-1. Create and activate a virtual environment:
 
-   **Windows:**
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   ```
-
-   **Linux/Mac:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
-
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
+### part 2: test the API
+Overview:
+- use the [pytest](https://docs.pytest.org/en/stable/) framework
+- create unit tests
+- create integration test
+file structure:
 ```
-
-3. Run the application:
-```bash
-python app.py
+├── /test
+│   ├── __init__.py         # define package (namespacing) 
+│   ├── conftest.py         # shared fixtures (dependency injection)
+│   ├── test_api.py         # integration testing
+│   └── test_models.py      # unit testing
 ```
-
-The API will be available at `http://localhost:5000`
-
-## Swagger UI Documentation
-
-The API includes interactive Swagger UI documentation. After starting the server:
-
-1. Open your browser and navigate to: `http://localhost:5000/apidocs`
-
-2. You'll see an interactive API documentation interface where you can:
-   - Browse all available endpoints
-   - See request/response schemas
-   - Test endpoints directly from the browser
-   - Authenticate using the "Authorize" button (enter your JWT token)
-
-3. To use the "Authorize" button:
-   - First, login via `/api/auth/login` to get your JWT token
-   - Click the "Authorize" button at the top of the Swagger UI
-   - Enter: `Bearer <your_jwt_token>` (replace `<your_jwt_token>` with your actual token)
-   - Now you can test protected endpoints directly from Swagger UI
-
-**Alternative**: You can also view the OpenAPI specification directly at `http://localhost:5000/apispec_1.json`
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/auth/register` - Register a new user
-  ```json
-  {
-    "username": "user123",
-    "password": "password123"
-  }
-  ```
-
-- `POST /api/auth/login` - Login and get JWT token
-  ```json
-  {
-    "username": "user123",
-    "password": "password123"
-  }
-  ```
-
-### Events
-
-- `GET /api/events` - Get all events
-- `GET /api/events/<id>` - Get a specific event
-- `POST /api/events` - Create a new event (requires authentication)
-  ```json
-  {
-    "title": "Python Meetup",
-    "description": "Monthly Python developer meetup",
-    "date": "2026-01-15T18:00:00",
-    "location": "Tech Hub, Room 101",
-    "capacity": 50,
-    "is_public": true,
-    "requires_admin": false
-  }
-  ```
-
-### RSVPs
-
-- `POST /api/rsvps/event/<event_id>` - RSVP to an event
-  ```json
-  {
-    "attending": true
-  }
-  ```
-
-- `GET /api/rsvps/event/<event_id>` - Get all RSVPs for an event
-
-## Authentication
-
-For protected endpoints, include the JWT token in the Authorization header:
+ 
+Completed Tasks:
+- created Makefile to run tests
+Notes:
+- basics of [Testing Flask Applications](https://flask.palletsprojects.com/en/stable/testing/)
+- learned about the difference between
+    - unit tests
+    - integration tests
+    - end-to-end test
+  so i adjusted the file structure accordingly to incorporate a seperate directory for the e2e tests
 ```
-Authorization: Bearer <your_jwt_token>
+├── tests/
+│   ├── conftest.py          <-- Global fixtures (like the DB setup)
+│   ├── unit/                <-- Low-level logic (test_models.py)
+│   │   └── test_password_hashing.py
+│   ├── integration/         <-- The 'client' fixture (test_api.py)
+│   │   └── test_events_flow.py
+│   └── e2e/                 <-- The 'requests' library
+│       ├── conftest.py      <-- E2E specific setup (starting the server)
+│       └── test_system.py
 ```
-
-## Security Notes
-
-This is a basic implementation designed for educational purposes. The following security considerations are intentionally simplified and can be improved in subsequent lessons:
-
-- Password storage (currently using werkzeug, but can be improved)
-- JWT token handling
-- Input validation
-- SQL injection prevention (SQLAlchemy helps, but can be improved)
-- Rate limiting
-- CORS configuration
-- Error handling and information disclosure
-
-## Database
-
-The application uses SQLite by default. The database file (`events.db`) will be created automatically on first run.
-
-**Note**: The first user registered automatically becomes an admin for demo purposes.
-
+- use fixtures to make the tests environment agnostic
+- unit tests are cheap and fast
+- integration tests are more expensive
+- dependency injection ensures:
+    - inversion of control
+    - decoupling
+    - mockability
+- dependency injection mitigates the dependency by injecting data/objects like:
+    - time
+    - external APIs
+    - environment variables and secrets
+    - file system
+    - databases
+- parametrization of test implements DRY (don't repeat yourself)
