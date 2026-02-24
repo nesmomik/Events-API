@@ -3,7 +3,7 @@ import requests
 import time
 
 @pytest.fixture(scope="session")
-def e2e_server():
+def local_server():
     """Returns the URL of the live Flask server for E2E tests."""
     url = "http://127.0.0.1:5005"
     
