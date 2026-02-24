@@ -1,7 +1,7 @@
 # integration tests
 from models import Event, RSVP
 import datetime
-import pytest
+# import pytest
 
 # api test
 def test_health_check(client):
@@ -12,11 +12,13 @@ def test_health_check(client):
 
 
 def register_user(client):
+    '''Helper function to register a user'''
     response = client.post("/api/auth/register", json={
         "username": "test",
         "password": "test"
     })
     return response
+
 
 def test_auth_register(client):
     """Tests user creation"""
