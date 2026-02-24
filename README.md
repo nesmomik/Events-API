@@ -1,14 +1,10 @@
-### course topic: from API to a production ready cloud service.
-
-repository: [GitHub](https://github.com/nesmomik/Events-API)
+# Events API: eductional repository
+## course topic: from API to a production ready cloud service.
 
 more documentation of the Events-API at the upstream repository:  [GitHub](https://github.com/Masterschool-SWE/Events-API)
 
-## course topic: from API to a production ready cloud service.
 
-repository: [GitHub](https://github.com/nesmomik/Events-API)
-
-### part 1: discover the API / preparation
+## part 1: discover the API / preparation
 Overview:
 - the [OpenAPI Specification](https://learn.openapis.org/), is a specification for a machine-readable interface definition language for describing, producing, consuming and visualizing web services
 - in the project a `openapi.yaml` file is provided to document the API
@@ -20,7 +16,7 @@ Completed Tasks:
 - run and explore the repo
 
 
-### part 2: test the API
+## part 2: test the API
 Overview:
 - use the [pytest](https://docs.pytest.org/en/stable/) framework
 - create unit tests
