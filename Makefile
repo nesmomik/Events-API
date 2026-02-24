@@ -10,7 +10,7 @@ help:
 dev:
 	uv run flask --app app.py run --debug
 
-test: test-unit test-integration #test-e2e
+test: test-unit test-integration test-e2e
 
 test-unit:
 	PYTHONPATH=. uv run pytest tests/unit
@@ -20,7 +20,8 @@ test-integration:
 
 test-e2e:
 	@echo "Starting E2E server..."
-	FLASK_ENV=testing FLASK_DEBUG=0 PYTHONPATH=. uv run flask --app app.py run --port 5005 & \
+	rm -f test_e2e.db instance/test_e2e.db
+	PYTHONPATH=. DATABASE_URL=sqlite:///test_e2e.db uv run flask --app app.py run --port 5005 & \
 	SERVER_PID=$$!; \
 	PYTHONPATH=. uv run pytest tests/e2e; \
 	EXIT_CODE=$$?; \
@@ -31,6 +32,7 @@ test-e2e:
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	rm -rf .pytest_cache
+	rm -f *.db instance/*.db
 	
 coverage:
 	uv run pytest --cov=app tests/
