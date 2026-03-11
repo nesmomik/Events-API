@@ -96,3 +96,23 @@ Notes:
 - can use a two stage container build, when using uv for dependencies
 - setting PYTHONPATH in pyproject.toml simplifies module importing and test execution with the Makefile
 
+## part 4: continous integration
+
+Overview:
+- use github actions to automate testing
+- push or pull-requests trigger:
+    - container build of the source code 
+    - run container
+    - run pytest vs containerized app
+
+Completed tasks:
+- setup initial github action workflow
+- added unit and integration tests job
+- setup initial container build and run job
+- added container tests and cleanup step 
+
+Notes:
+- a specific workflow can be run on all branches or on specific branches only
+- not all actions are in https://github.com/actions, but most are in the https://github.com/marketplace
+- bash scripts allowed in steps
+
