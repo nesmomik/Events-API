@@ -1,0 +1,13 @@
+.git
+.gitignore
+.github
+
+.pytest_cache
+.venv
+.vscode
+.uv
+
+.env
+
+Dockerfile
+Makefile
