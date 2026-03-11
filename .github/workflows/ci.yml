@@ -2,9 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - feature-continous-integration
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - feature-continous-integration
   workflow_dispatch:
 
 jobs:
