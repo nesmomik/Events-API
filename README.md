@@ -79,3 +79,20 @@ make clean    	- Remove cache files
     - file system
     - databases
 - parametrization of test implements DRY (don't repeat yourself)
+
+## part 3: containerization
+
+Overview:
+- create Dockerfile
+- build container
+- run tests against container
+
+Completed tasks:
+- added Dockerfile and .dockerignore
+- build and run container
+- copied end-to-end tests and changed fixture to be able to use them with the container
+
+Notes:
+- can use a two stage container build, when using uv for dependencies
+- setting PYTHONPATH in pyproject.toml simplifies module importing and test execution with the Makefile
+
