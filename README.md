@@ -21,6 +21,7 @@ Overview:
 - use the [pytest](https://docs.pytest.org/en/stable/) framework
 - create unit tests
 - create integration test
+- proposed file structure:
 file structure:
 ```
 ├── /test
@@ -32,13 +33,27 @@ file structure:
  
 Completed Tasks:
 - created Makefile to run tests
-Notes:
+- created unit test
+- created integration tests
+- created end-to-end tests
+
+Makefile Usage:
+```
+make dev        - Start dev server
+make test     	- Run all tests
+make test-unit  - Run unit tests
+make test-int   - Run integration tests
+make test-e2e   - Run end-to-end tests
+make clean    	- Remove cache files
+```
+
+> Notes:
 - basics of [Testing Flask Applications](https://flask.palletsprojects.com/en/stable/testing/)
 - learned about the difference between
     - unit tests
     - integration tests
     - end-to-end test
-  so i adjusted the file structure accordingly to incorporate a seperate directory for the e2e tests
+  So i adjusted the file structure accordingly to incorporate a seperate directory for the e2e tests.
 ```
 ├── tests/
 │   ├── conftest.py          <-- Global fixtures (like the DB setup)
