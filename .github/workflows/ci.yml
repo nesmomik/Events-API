@@ -15,5 +15,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: checkout code
+        uses: actions/checkout@v6
+
+      - name: install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: set up python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: install dependencies
+        run: uv sync --frozen
+
+      - name: run unit tests
+        run: uv run pytest tests/unit
