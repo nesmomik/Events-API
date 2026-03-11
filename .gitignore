@@ -47,3 +47,5 @@ instance/
 .DS_Store
 Thumbs.db
 
+.github
+.lock 
