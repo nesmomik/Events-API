@@ -64,3 +64,26 @@ jobs:
           docker logs events-api-test
           exit 1
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Run container tests
+        env:
+          CONTAINER_URL: http://localhost:5000
+        run: uv run pytest tests/container
+
+      - name: Stop and remove container
+        if: always()
+        run: |
+          docker stop events-api-test || true
+          docker rm events-api-test || true
+
+
