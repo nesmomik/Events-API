@@ -2,10 +2,12 @@
 
 help:
 	@echo "Usage:"
-	@echo "  make dev      - Start the Flask development server"
-	@echo "  make test     - Run pytest suite"
-	@echo "  make clean    - Remove python cache files"
-	@echo "  make coverage - Run tests and show coverage"
+	@echo "  make dev     	- Start dev server"
+	@echo "  make test     	- Run all tests"
+	@echo "  make test-unit - Run unit tests"
+	@echo "  make test-int  - Run integration tests"
+	@echo "  make test-e2e  - Run end-to-end tests"
+	@echo "  make clean    	- Remove cache files"
 
 dev:
 	uv run flask --app app.py run --debug
@@ -13,17 +15,17 @@ dev:
 test: test-unit test-integration test-e2e
 
 test-unit:
-	PYTHONPATH=. uv run pytest tests/unit
+	uv run pytest tests/unit
 
 test-integration:
-	PYTHONPATH=. uv run pytest tests/integration
+	uv run pytest tests/integration
 
 test-e2e:
 	@echo "Starting E2E server..."
 	rm -f test_e2e.db instance/test_e2e.db
-	PYTHONPATH=. DATABASE_URL=sqlite:///test_e2e.db uv run flask --app app.py run --port 5005 & \
+	DATABASE_URL=sqlite:///test_e2e.db uv run flask --app app.py run --port 5005 & \
 	SERVER_PID=$$!; \
-	PYTHONPATH=. uv run pytest tests/e2e; \
+	uv run pytest tests/e2e; \
 	EXIT_CODE=$$?; \
 	echo "Stopping E2E server (PID $$SERVER_PID)..."; \
 	kill $$SERVER_PID || true; \
@@ -33,6 +35,3 @@ clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	rm -rf .pytest_cache
 	rm -f *.db instance/*.db
-	
-coverage:
-	uv run pytest --cov=app tests/
