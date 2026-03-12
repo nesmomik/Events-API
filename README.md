@@ -1,10 +1,10 @@
 # Events API: eductional repository
-## course topic: from API to a production ready cloud service.
+## Course topic: From API to a production ready cloud service.
 
-more documentation of the Events-API at the upstream repository:  [GitHub](https://github.com/Masterschool-SWE/Events-API)
+More documentation of the Events-API at the upstream repository:  [GitHub](https://github.com/Masterschool-SWE/Events-API)
 
 
-## part 1: discover the API / preparation
+## Part 1: Discover the API / Preparation
 
 Goal: Run the Events-API and explore it with the docs and an API tool like Postman. 
 
@@ -28,9 +28,12 @@ uv add -r requirements.txt
 
 # run app
 uv run app.py
+
+# test health endpoint
+curl -sf http://localhost:5000/api/health
 ```
 
-## part 2: test the API
+## Part 2: Test the API
 
 Goal: Add a basic automated test suite for the Events-API.
 
@@ -75,7 +78,7 @@ make help
 make test
 ```
 
-## part 3: containerization
+## Part 3: Containerization
 
 Goal: Package the Events API in a Docker container and verify the tests pass.
 
@@ -106,7 +109,7 @@ make test-container
 ```
 
 
-## part 4: continous integration
+## Part 4: Continous Integration
 
 Goal: Add a basic CI pipeline to the Events API GitHub repository using GitHub Actions.
 
@@ -138,6 +141,30 @@ git commit --allow-empty -m "chore: trigger CI"
 git push
 ```
 
-## part 5: continuous deployment
+## Part 5: Continuous Deployment
 
-Goal: Deploy your Events API to the cloud using Docker Hub and Render and test
+Goal: Deploy your Events API to the cloud using Docker Hub and Render and test it
+
+Completed Tasks:
+- build and push image to [Docker Hub](https://hub.docker.com/repositories/nesmomik)
+- create [Render](https://render.com/) [webservice](https://events-api-lt80.onrender.com/apidocs/)
+- create GitHub environment to manage environment variables and secrets in GitHub Actions
+- create new render-deployment job in the GitHub Actions workflow
+
+Commands:
+```
+# log in to docker account (nesmomik)
+docker login
+
+# build Docker image with account name
+docker build -t nesmomik/events-api .
+
+# push the image to docker hub
+docker push
+
+# trigger the deploy webhook
+curl <secret-webhook-url>
+```
+
+Notes:
+- Register on Render with GitHub from the start automatically allows GitOps workflow
