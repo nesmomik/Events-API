@@ -5,66 +5,52 @@ more documentation of the Events-API at the upstream repository:  [GitHub](https
 
 
 ## part 1: discover the API / preparation
-Overview:
+
+Goal: Run the Events-API and explore it with the docs and an API tool like Postman. 
+
+Completed Tasks:
+- forked the upstream repo
+- made the project managed by [uv](https://docs.astral.sh/uv/)
+- run and explore the repo
+
+Notes:
 - the [OpenAPI Specification](https://learn.openapis.org/), is a specification for a machine-readable interface definition language for describing, producing, consuming and visualizing web services
 - in the project a `openapi.yaml` file is provided to document the API
 - this allows to use [SwaggerUI](https://swagger.io/tools/swagger-ui/) to explore the API functionality and also to try it out
 
-Completed Tasks:
-- forked the upstream repo
-- set up the environment with `uv`
-- run and explore the repo
+Commands:
+```
+# create pyproject.toml
+uv init --bare
 
+# add dependencies
+uv add -r requirements.txt
+
+# run app
+uv run app.py
+```
 
 ## part 2: test the API
+
+Goal: Add a basic automated test suite for the Events-API.
+
 Overview:
 - use the [pytest](https://docs.pytest.org/en/stable/) framework
 - create unit tests
-- create integration test
-- proposed file structure:
-file structure:
-```
-├── /test
-│   ├── __init__.py         # define package (namespacing) 
-│   ├── conftest.py         # shared fixtures (dependency injection)
-│   ├── test_api.py         # integration testing
-│   └── test_models.py      # unit testing
-```
+- create integration tests
  
 Completed Tasks:
-- created Makefile to run tests
 - created unit test
 - created integration tests
 - created end-to-end tests
+- created Makefile to run tests
 
-Makefile Usage:
-```
-make dev        - Start dev server
-make test     	- Run all tests
-make test-unit  - Run unit tests
-make test-int   - Run integration tests
-make test-e2e   - Run end-to-end tests
-make clean    	- Remove cache files
-```
-
-> Notes:
+Notes:
 - basics of [Testing Flask Applications](https://flask.palletsprojects.com/en/stable/testing/)
 - learned about the difference between
     - unit tests
     - integration tests
     - end-to-end test
-  So i adjusted the file structure accordingly to incorporate a seperate directory for the e2e tests.
-```
-├── tests/
-│   ├── conftest.py          <-- Global fixtures (like the DB setup)
-│   ├── unit/                <-- Low-level logic (test_models.py)
-│   │   └── test_password_hashing.py
-│   ├── integration/         <-- The 'client' fixture (test_api.py)
-│   │   └── test_events_flow.py
-│   └── e2e/                 <-- The 'requests' library
-│       ├── conftest.py      <-- E2E specific setup (starting the server)
-│       └── test_system.py
-```
 - use fixtures to make the tests environment agnostic
 - unit tests are cheap and fast
 - integration tests are more expensive
@@ -80,7 +66,18 @@ make clean    	- Remove cache files
     - databases
 - parametrization of test implements DRY (don't repeat yourself)
 
+Commands:
+```
+# show all commands
+make help   
+
+# run all tests
+make test
+```
+
 ## part 3: containerization
+
+Goal: Package the Events API in a Docker container and verify the tests pass.
 
 Overview:
 - create Dockerfile
@@ -94,9 +91,24 @@ Completed tasks:
 
 Notes:
 - can use a two stage container build, when using uv for dependencies
-- setting PYTHONPATH in pyproject.toml simplifies module importing and test execution with the Makefile
+- setting PYTHONPATH in pyproject.toml simplifies module importing and test execution
+
+Commands:
+```
+# build Docker image
+docker build -t events-api:test .
+
+# start container
+docker run -d -p 5000:5000 --name events-api-test events-api:test
+
+# run container tests
+make test-container
+```
+
 
 ## part 4: continous integration
+
+Goal: Add a basic CI pipeline to the Events API GitHub repository using GitHub Actions.
 
 Overview:
 - use github actions to automate testing
@@ -109,10 +121,23 @@ Completed tasks:
 - setup initial github action workflow
 - added unit and integration tests job
 - setup initial container build and run job
-- added container tests and cleanup step 
+- added container tests and cleanup step
+- added `workflow_dispatch` event trigger to allow manual run on [GitHub](https://github.com/nesmomik/Events-API/actions/workflows/ci.yml)
 
 Notes:
 - a specific workflow can be run on all branches or on specific branches only
-- not all actions are in https://github.com/actions, but most are in the https://github.com/marketplace
+- not all actions are in [Actions](https://github.com/actions), but most are in the [Marketplace](https://github.com/marketplace)
 - bash scripts allowed in steps
 
+Commands:
+```
+# force empty commit
+git commit --allow-empty -m "chore: trigger CI"
+
+# trigger workflow
+git push
+```
+
+## part 5: continuous deployment
+
+Goal: Deploy your Events API to the cloud using Docker Hub and Render and test
