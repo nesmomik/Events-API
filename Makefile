@@ -11,7 +11,7 @@ help:
 	@echo "  make clean          - Remove cache files"
 
 dev:
-	uv run flask --app app.py run --debug
+	uv run app.py
 
 test: test-unit test-integration test-e2e test-container 
 
