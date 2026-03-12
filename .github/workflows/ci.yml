@@ -94,14 +94,14 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ env.DOCKER_HUB_USER }}
+          username: ${{ vars.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ${{ env.DOCKER_HUB_USER }}/events-api:latest .
+        run: docker build -t ${{ vars.DOCKER_HUB_USER }}/events-api:latest .
 
       - name: Push Docker image
-        run: docker push ${{ env.DOCKER_HUB_USER }}/events-api:latest
+        run: docker push ${{ vars.DOCKER_HUB_USER }}/events-api:latest
 
       - name: Trigger deploy webhook
         run: |
@@ -110,7 +110,7 @@ jobs:
       - name: Wait for service to be healthy
         run: |
           for i in {1..40}; do
-            if curl -sf https://${{ env.RENDER_BASE_URL }}/api/health; then
+            if curl -sf https://${{ vars.RENDER_BASE_URL }}/api/health; then
               echo "API is healthy."
               exit 0
             fi
@@ -118,3 +118,4 @@ jobs:
           done
           echo "Deployment failed."
           exit 1
+
