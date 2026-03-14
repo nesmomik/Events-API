@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - main
-      - feature-continuous-deployment
   pull_request:
     branches:
       - main
-      - feature-continuous-deployment
   workflow_dispatch:
 
 jobs:
@@ -38,9 +36,13 @@ jobs:
   container-tests:
     needs: unit-and-integration-tests
     runs-on: ubuntu-latest
+    environment: development
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Insert development API URL into OpenAPI
+        run: sed -i "s|\${API_BASE_URL}|${{ vars.API_BASE_URL }}|g" openapi.yaml
 
       - name: Build Docker image
         run: docker build -t events-api:test .
@@ -51,7 +53,7 @@ jobs:
       - name: Wait for container to be healthy
         run: |
           for i in {1..20}; do
-            if curl -sf http://localhost:5000/api/health; then
+            if [ "$(curl -s -o /dev/null -w "%{http_code}" ${{ vars.API_BASE_URL }}/api/health)" = "200" ]; then
               echo "App in container is ready."
               exit 0
             fi
@@ -91,6 +93,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Insert production API URL into OpenAPI
+        run: sed -i "s|\${API_BASE_URL}|${{ vars.API_BASE_URL }}|g" openapi.yaml
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v4
         with:
@@ -110,7 +115,7 @@ jobs:
       - name: Wait for service to be healthy
         run: |
           for i in {1..36}; do
-            if [ "$(curl -s -o /dev/null -w "%{http_code}" ${{ vars.RENDER_BASE_URL }}/api/health)" = "200" ]; then
+            if [ "$(curl -s -o /dev/null -w "%{http_code}" ${{ vars.API_BASE_URL }}/api/health)" = "200" ]; then
               echo "API is healthy."
               exit 0
             fi
