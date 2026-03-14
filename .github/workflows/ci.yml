@@ -114,7 +114,7 @@ jobs:
               echo "API is healthy."
               exit 0
             fi
-            sleep 3
+            sleep 5
           done
           echo "Deployment failed."
           exit 1
