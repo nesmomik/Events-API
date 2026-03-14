@@ -110,7 +110,7 @@ jobs:
       - name: Wait for service to be healthy
         run: |
           for i in {1..36}; do
-            if curl -sf https://${{ vars.RENDER_BASE_URL }}/api/health; then
+            if [ "$(curl -s -o /dev/null -w "%{http_code}" ${{ vars.RENDER_BASE_URL }}/api/health)" = "200" ]; then
               echo "API is healthy."
               exit 0
             fi
@@ -118,4 +118,9 @@ jobs:
           done
           echo "Deployment failed."
           exit 1
+
+      - name: Remove local container build
+        if: always()
+        run: |
+          docker rm ${{ vars.DOCKER_HUB_USER }}/events-api:latest || true
 
